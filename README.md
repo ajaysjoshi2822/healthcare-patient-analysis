@@ -1,5 +1,5 @@
-# healthcare-patient-analysis
-Analysis of patient trends and readmission drivers using Excel, SQL, and Tableau 
+# Super Store Analysis
+Analysis of retail sales trends and drivers using Excel, SQL, and Tableau 
 
 # Superstore Sales and Profitability Dashboard
 
@@ -32,6 +32,7 @@ Data was transformed in BigQuery using SQL.
 This query groups transactions into discount bands and calculates sales, shipping cost, discount amount, profit, and profit margin by year.
 
 ```sql
+
 WITH discount_band_analysis AS (
   SELECT
     Year AS year,
@@ -56,12 +57,14 @@ SELECT
   ROUND((profit / sales) * 100, 2) AS profit_margin
 FROM discount_band_analysis
 ORDER BY year, profit DESC;
+
 ```
 
 #### Sub-Category Profit Analysis
 This query evaluates sub-category performance by category and year, including sales, discount amount, shipping cost, profit, profit margin, and profit rank within each category.
 
 ```sql
+
 WITH subcategory_profit_analysis AS (
   SELECT
     Category AS category,
@@ -84,6 +87,7 @@ SELECT
   ) AS profit_rank
 FROM subcategory_profit_analysis
 ORDER BY year, category, profit_rank;
+
 ```
 ## Dashboard Structure (Tableau)  
 
@@ -125,17 +129,18 @@ Evaluates differences in customer behavior and operational efficiency
 
 ![Dashboard Preview](https://github.com/user-attachments/assets/283cc169-c873-4d2c-b318-41c53bfbb872)
 
-
 - Tableau Dashboard: https://public.tableau.com/views/Portfolio-asj_twb_3/Dashboard1
 
 ## Key Takeaways
 
-This analysis shows that ER performance challenges are primarily driven by **department-level workload and wait-time distribution rather than overall demand fluctuations**.
+- Profit margins remained stable (~12%–14%), indicating profitability is driven more by sales volume than margin expansion.
 
-- **High-volume departments consistently exhibit higher wait times and long-wait percentages**, indicating operational bottlenecks where patient flow may be constrained  
-- **P90 wait times remain elevated across departments**, suggesting that a subset of patients experiences significantly longer delays, even when average wait times appear stable  
-- **Longer wait times are associated with lower patient satisfaction**, highlighting the direct impact of operational efficiency on patient experience  
-- **Overall visit volume remains relatively stable over time**, indicating that inefficiencies are driven more by internal processes than by fluctuations in demand  
-- **Wait time distribution reveals a meaningful portion of patients exceeding critical thresholds (45–55+ minutes)**, representing the greatest opportunity for improvement  
+- Higher discount levels consistently reduced profitability, making discounting a key lever to optimize.
 
-Improving efficiency in high-impact departments and reducing long-wait occurrences presents the greatest opportunity to enhance both operational performance and patient satisfaction.
+- Top-performing sub-categories contribute disproportionately to profit, highlighting clear areas for focus.
+
+- Lower discount bands (0%–10%) generated the strongest profit outcomes.
+
+- Customer segments and shipping modes show varying profitability, reflecting differences in behavior and cost efficiency.
+
+- Shipping costs and discount strategy are the primary drivers impacting overall profit performance.
