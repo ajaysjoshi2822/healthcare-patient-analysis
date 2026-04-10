@@ -127,3 +127,15 @@ Evaluates differences in customer behavior and operational efficiency
 
 
 - Tableau Dashboard: https://public.tableau.com/views/Portfolio-asj_twb_3/Dashboard1
+
+## Key Takeaways
+
+This analysis shows that ER performance challenges are primarily driven by **department-level workload and wait-time distribution rather than overall demand fluctuations**.
+
+- **High-volume departments consistently exhibit higher wait times and long-wait percentages**, indicating operational bottlenecks where patient flow may be constrained  
+- **P90 wait times remain elevated across departments**, suggesting that a subset of patients experiences significantly longer delays, even when average wait times appear stable  
+- **Longer wait times are associated with lower patient satisfaction**, highlighting the direct impact of operational efficiency on patient experience  
+- **Overall visit volume remains relatively stable over time**, indicating that inefficiencies are driven more by internal processes than by fluctuations in demand  
+- **Wait time distribution reveals a meaningful portion of patients exceeding critical thresholds (45–55+ minutes)**, representing the greatest opportunity for improvement  
+
+Improving efficiency in high-impact departments and reducing long-wait occurrences presents the greatest opportunity to enhance both operational performance and patient satisfaction.
