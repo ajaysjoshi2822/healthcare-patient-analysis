@@ -24,8 +24,67 @@ Data was transformed in BigQuery using SQL.
 - Created calculated metrics:  
   - Profit Margin = Profit / Sales  
   - Discount Amount = Discount * Sales  
-  - Shipping Cost Ratio = Shipping Cost / Sales  
+  - Shipping Cost Ratio = Shipping Cost / Sales
 
+### Sample SQL Queries
+
+#### Discount Band Analysis
+This query groups transactions into discount bands and calculates sales, shipping cost, discount amount, profit, and profit margin by year.
+
+```sql
+WITH discount_band_analysis AS (
+  SELECT
+    Year AS year,
+    ROUND(SUM(Sales), 2) AS sales,
+    ROUND(SUM(`Shipping Cost`), 2) AS shipping_cost,
+    ROUND(SUM(Discount * Sales), 2) AS discount_amount,
+    ROUND(SUM(Profit), 2) AS profit,
+    CASE
+      WHEN Discount = 0 THEN '0'
+      WHEN Discount BETWEEN 0.01 AND 0.10 THEN '0.01 to 0.10'
+      WHEN Discount BETWEEN 0.11 AND 0.20 THEN '0.11 to 0.20'
+      WHEN Discount BETWEEN 0.21 AND 0.30 THEN '0.21 to 0.30'
+      WHEN Discount BETWEEN 0.31 AND 0.40 THEN '0.31 to 0.40'
+      ELSE '0.41 to 0.50'
+    END AS discount_band
+  FROM `portfolio-financial-data.finance_portfolio.superstore_data`
+  GROUP BY year, discount_band
+)
+
+SELECT
+  *,
+  ROUND((profit / sales) * 100, 2) AS profit_margin
+FROM discount_band_analysis
+ORDER BY year, profit DESC;
+```
+
+#### Sub-Category Profit Analysis
+This query evaluates sub-category performance by category and year, including sales, discount amount, shipping cost, profit, profit margin, and profit rank within each category.
+
+```sql
+WITH subcategory_profit_analysis AS (
+  SELECT
+    Category AS category,
+    `Sub-Category` AS sub_category,
+    Year AS year,
+    ROUND(SUM(Sales), 2) AS sales,
+    ROUND(SUM(Discount * Sales), 2) AS discount_amount,
+    ROUND(SUM(`Shipping Cost`), 2) AS shipping_cost,
+    ROUND(SUM(Profit), 2) AS profit
+  FROM `portfolio-financial-data.finance_portfolio.superstore_data`
+  GROUP BY category, sub_category, year
+)
+
+SELECT
+  *,
+  ROUND((profit / sales) * 100, 2) AS profit_margin,
+  RANK() OVER (
+    PARTITION BY year, category
+    ORDER BY profit DESC
+  ) AS profit_rank
+FROM subcategory_profit_analysis
+ORDER BY year, category, profit_rank;
+```
 ## Dashboard Structure (Tableau)  
 
 ### Product Performance  
@@ -62,8 +121,9 @@ Evaluates differences in customer behavior and operational efficiency
 - Dashboard design and visualization best practices  
 - Ability to translate data into actionable insights  
 
-## Dashboard Preview  
-(Add screenshot here)
+## Dashboard Preview
 
-## Links  
-- Tableau Dashboard: (add link)  
+![Dashboard Preview](https://github.com/user-attachments/assets/283cc169-c873-4d2c-b318-41c53bfbb872)
+
+
+- Tableau Dashboard: https://public.tableau.com/views/Portfolio-asj_twb_3/Dashboard1
